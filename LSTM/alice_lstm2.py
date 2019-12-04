@@ -56,6 +56,7 @@ NUM_PREDS_PER_EPOCH = 100
 # Creating the Model LSTM
 model = Sequential()
 model.add(LSTM(HIDDEN_SIZE,  return_sequences = True, input_shape=(SEQ_LEN, len_chars), unroll=True))
+model.add(LSTM(HIDDEN_SIZE, return_sequences = False, unroll=True))
 model.add(Dense(len_chars, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer="RMSprop", metrics=['accuracy'])
 
