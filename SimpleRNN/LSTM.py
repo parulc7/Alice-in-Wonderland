@@ -1,8 +1,8 @@
-# Importing the required modules
 from __future__ import print_function
 from keras.models import Sequential
-from keras.layers.recurrent import SimpleRNN    
+from keras.layers.recurrent import LSTM
 from keras.layers import Dense
+from keras.layers import Bidirectional
 from keras.utils import vis_utils
 import numpy as np
 
@@ -54,7 +54,8 @@ NUM_PREDS_PER_EPOCH = 100
 
 # Creating the Model
 model = Sequential()
-model.add(SimpleRNN(HIDDEN_SIZE, return_sequences = False, input_shape=(SEQ_LEN, len_chars), unroll=True))
+model.add(Bidirectional(LSTM(HIDDEN_SIZE, return_sequences = True, input_shape=(SEQ_LEN, len_chars), unroll=True)))
+model.add(Bidirectional(LSTM(HIDDEN_SIZE//2, return_sequences = False, input_shape=(SEQ_LEN, len_chars), unroll=True)))
 model.add(Dense(len_chars, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
