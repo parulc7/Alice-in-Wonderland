@@ -1,8 +1,14 @@
-# Importing the required modules
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
 from __future__ import print_function
 from keras.models import Sequential
-from keras.layers.recurrent import SimpleRNN    
+from keras.layers.recurrent import LSTM
 from keras.layers import Dense
+from keras.layers import Bidirectional
 from keras.utils import vis_utils
 import numpy as np
 
@@ -49,14 +55,17 @@ for i, input_char in enumerate(input_chars):
 HIDDEN_SIZE = 128
 BATCH_SIZE = 128
 NUM_ITERATIONS = 25
-NUM_EPOCHS_PER_ITERATION = 1
+NUM_EPOCHS_PER_ITERATION = 3
 NUM_PREDS_PER_EPOCH = 100
 
 # Creating the Model
 model = Sequential()
-model.add(SimpleRNN(HIDDEN_SIZE, return_sequences = False, input_shape=(SEQ_LEN, len_chars), unroll=True))
+#model.add(Embedding)
+model.add(Bidirectional(LSTM(HIDDEN_SIZE, return_sequences = True, input_shape=(SEQ_LEN, len_chars), unroll=True)))
+model.add(Bidirectional(LSTM(HIDDEN_SIZE, return_sequences = False, input_shape=(SEQ_LEN, len_chars), unroll=True)))
+#model.add(Dense(HIDDEN_SIZE,activation = 'relu'))
 model.add(Dense(len_chars, activation='softmax'))
-model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Predicting and testing the model
 for iteration in range(NUM_ITERATIONS):
@@ -78,6 +87,12 @@ for iteration in range(NUM_ITERATIONS):
         test_chars=test_chars[1:] + y_pred
 print()
 
+
+
+
+
+
+# In[ ]:
 
 
 
